@@ -1,0 +1,21 @@
+<html>
+<head>
+    <SCRIPT LANGUAGE="JavaScript">
+        <!--
+        setTimeout("location.reload()",100);
+        //-->
+    </SCRIPT>
+</head>
+<body>
+    <div>
+        <h1><a href="/">test</a></h1>
+    </div>
+
+    {% for packet in packets %}
+        <div>
+            <p>d_addr: {{ packet.d_addr }}</p>
+            <p>s_addr: {{ packet.s_addr }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
