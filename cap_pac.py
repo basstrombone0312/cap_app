@@ -1,47 +1,44 @@
-#!/home/fukushima/cap_app/venv/bin python3
 # -*- coding: utf-8 -*-
+
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
 django.setup()
 
 import pymysql
-from packet_vis.models import Packet
-
- 
 from scapy.all import *
-from netaddr.ip import IPAddress
+#from netaddr.ip import IPAddress
+
+c = 0
+
+connector = pymysql.connect(
+  user='worker',
+  passwd='packetworkerdata',
+  host='',
+  port='',
+  db='packetdata',
+  cursorclass=pymysql.cursors.DictCursor)
+
+cursor = connector.cursor()
 
 def packet_callback(packet):
-  da = int(IPAddress(packet[0]['IP'].dst))
-  sa = int(IPAddress(packet[0]['IP'].src))
+  da = packet[0]['IP'].dst
+  sa = packet[0]['IP'].src
 
-  p = Packet()
-  p.d_port = 1
-  p.s_port = 1
-  time = 1
-  p.d_addr = da
-  p.s_addr = sa
-  p.commit()
+  global c
+  c=c+1
 
+  sql = "INSERT INTO packet_vis_packet (d_addr, s_addr, d_port, s_port, time, iso_code) VALUES (%s, %s, %s, %s, %s, %s)"
+  cursor.execute(sql, (sa, da, 1, 1, c, 'UNK'))
+  connector.commit()
+
+  if c == 1000:
+    sql = "TRUNCATE TABLE packet_vis_packet"
+    cursor.execute(sql,())
+    connector.commit
+    global c
+    c = 0
 
 sniff(prn=packet_callback, count=0)
 
 
-
-#c=0
-#while True:
-#    num = random.randint(1,100)
-
-#    p = Packet()
-#    p.number = num
-#    p.created_date = timezone.now()
-#    p.save()
-
-#    time.sleep(1)
-#    c = c+1
-
-#    if c == 5:
-#        pa = Post.objects.all()
-#        pa.delete()
-#        c=0
