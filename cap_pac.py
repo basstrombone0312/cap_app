@@ -30,7 +30,6 @@ def packet_callback(packet):
   try:
     record = reader.country(ip.src)
   # ローカルアドレスだったりデータベースに無かったりでエラーが出る
-  # 止まってしまうのでcontinue
   except:
     e = -1
 
@@ -61,7 +60,7 @@ def packet_callback(packet):
                                   'iso_code': code}]  
     
   # 100件溜まったらDBにINSERT
-  if len(packet_list) == 100:
+  if len(packet_list) == 10:
     for item, _ in enumerate(packet_list):
       dic = packet_list[item] 
       sql = "INSERT INTO packet_vis_packet (d_addr, s_addr, d_port, s_port, ip_prot, time, iso_code) VALUES (%s, %s, %s, %s, %s, %s, %s)"

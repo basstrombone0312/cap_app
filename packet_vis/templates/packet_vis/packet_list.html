@@ -27,15 +27,20 @@
 
     var tcp;
     var udp;
+    var max_id=0;
     
     function act() { 
       $.ajax({
         'url':'{% url "api_v1_packets" %}',
         'type':'GET',
+        'data':{
+          'query':max_id
+        },
         'dataType':'json',
         'success':function(response){
            tcp = response.num_tcp
            udp = response.num_udp
+           max_id = response.max_id
         },
       });
       
@@ -44,11 +49,13 @@
         {"time": d3.time, "y": udp},      
       ]
       
+
+      
       lineChart.push(current);
 
       setTimeout(function (){
         act();
-      }, 3000 );
+      }, 1500 );
     }
     act();
   </script>
