@@ -5,7 +5,6 @@ from django.views import generic
 
 from .models import Packet
 
-import time
 
 def packet_list(request):
   return render(request, 'packet_vis/packet_list.html', {})
