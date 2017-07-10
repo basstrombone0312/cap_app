@@ -1,25 +1,57 @@
 <html>
 <head>
-    <SCRIPT LANGUAGE="JavaScript">
-        <!--
-        setTimeout("location.reload()",12000);
-        //-->
-    </SCRIPT>
+  <title>graph test</title>
+
+  {% load staticfiles %}
+  <script type="text/javascript" src="{% static 'packet_vis/jquery-3.2.1.min.js' %}"></script>
+  <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="{% static 'packet_vis/epoch-0.8.4/dist/js/epoch.min.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'packet_vis/epoch-0.8.4/dist/css/epoch.min.css' %}">  
+  
 </head>
 <body>
-    <div>
-        <h1><a href="/">test</a></h1>
+  <h1>Real time chart</h1>
+  <div id="graph" class="epoch" style="height: 200px;"></div>
 
-    </div>
+  <script type="text/javascript">
+  
+    var data = [
+      { label: "tcp", values: [] },
+      { label: "udp", values: [] },
+    ];
+    var lineChart = $('#graph').epoch({
+      type: 'time.line',
+      data: data,
+      axes: ['left', 'right', 'bottom']
+    });
 
+    var tcp;
+    var udp;
+    
+    function act() { 
 
-    {% for packet in packets %}
-        <div>
-            d_addr: {{ packet.d_addr }},
-            s_addr: {{ packet.s_addr }},
-            count: {{ packet.time }},
-        </div>
-    {% endfor %}
+      $.ajax({
+        'url':'{% url "api_v1_packets" %}',
+        'type':'GET',
+        'dataType':'json',
+        'success':function(response){
+           tcp = response.num_tcp
+           udp = response.num_udp
+        },
+      });
+      
+      current = [
+        {"time": d3.time, "y": tcp},
+        {"time": d3.time, "y": udp},      
+      ]
+      
+      lineChart.push(current);
 
+      setTimeout(function (){
+        act();
+      }, 2000 );
+    }
+    act();
+  </script>
 </body>
 </html>
