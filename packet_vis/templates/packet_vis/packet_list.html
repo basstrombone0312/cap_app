@@ -4,17 +4,17 @@
 
   {% load staticfiles %}
   <script type="text/javascript" src="{% static 'packet_vis/jquery-3.2.1.min.js' %}"></script>
+  <!-- v3じゃないとepochの互換性がない-->
   <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="{% static 'packet_vis/epoch-0.8.4/dist/js/epoch.min.js' %}"></script>
   <link rel="stylesheet" type="text/css" href="{% static 'packet_vis/epoch-0.8.4/dist/css/epoch.min.css' %}">  
   
 </head>
 <body>
-  <h1>Real time chart</h1>
+  <h1>graph test</h1>
   <div id="graph" class="epoch" style="height: 200px;"></div>
 
   <script type="text/javascript">
-  
     var data = [
       { label: "tcp", values: [] },
       { label: "udp", values: [] },
@@ -29,7 +29,6 @@
     var udp;
     
     function act() { 
-
       $.ajax({
         'url':'{% url "api_v1_packets" %}',
         'type':'GET',
@@ -49,7 +48,7 @@
 
       setTimeout(function (){
         act();
-      }, 2000 );
+      }, 3000 );
     }
     act();
   </script>

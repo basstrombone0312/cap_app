@@ -18,7 +18,8 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'', include('packet_vis.urls')),
-
+  # /admin で管理サイトへ
+  url(r'^admin/', admin.site.urls),
+  # / でpacket_visアプリへ
+  url(r'', include('packet_vis.urls')),
 ]

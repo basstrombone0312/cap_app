@@ -10,11 +10,8 @@ import time
 def packet_list(request):
   return render(request, 'packet_vis/packet_list.html', {})
 
-# Create your views here.
-def api_v1_packets(request):
-#    packets = Packet.objects.all()
-#    return render(request, 'packet_vis/packet_list.html', {'packets':packets})
 
+def api_v1_packets(request):
   if request.method == 'GET':
     tcp_packets = Packet.objects.filter(ip_prot = 6)
     udp_packets = Packet.objects.filter(ip_prot = 17) 
