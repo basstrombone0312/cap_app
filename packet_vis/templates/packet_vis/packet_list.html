@@ -28,6 +28,7 @@
     var tcp;
     var udp;
     var max_id=0;
+    var packet_time
     
     function act() { 
       $.ajax({
@@ -41,12 +42,13 @@
            tcp = response.num_tcp
            udp = response.num_udp
            max_id = response.max_id
+           packet_time = response.last_packet_time
         },
       });
       
       current = [
-        {"time": d3.time, "y": tcp},
-        {"time": d3.time, "y": udp},      
+        {"time": packet_time, "y": tcp},
+        {"time": packet_time, "y": udp},      
       ]
       
       lineChart.push(current);

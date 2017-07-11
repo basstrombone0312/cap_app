@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Packet(models.Model):
-  time = models.DecimalField(max_digits=14, decimal_places=4)
+  time = models.FloatField()
   d_addr = models.BinaryField()
   s_addr = models.BinaryField()
   d_port = models.IntegerField()
